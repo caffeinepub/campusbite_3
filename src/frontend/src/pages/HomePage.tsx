@@ -26,8 +26,19 @@ export function HomePage() {
 
   return (
     <main>
-      <section className="bg-white py-16 md:py-24 overflow-hidden">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      {/* Hero Section with canteen background */}
+      <section
+        className="relative py-16 md:py-24 overflow-hidden"
+        style={{
+          backgroundImage:
+            "url('/assets/whatsapp_image_2026-03-31_at_1.29.25_pm-019d4527-d63a-75fd-b512-3f256fbf30ce.jpeg')",
+          backgroundSize: "cover",
+          backgroundPosition: "center",
+        }}
+      >
+        {/* Dark overlay for readability */}
+        <div className="absolute inset-0 bg-black/60" />
+        <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
             <motion.div
               initial={{ opacity: 0, x: -40 }}
@@ -37,12 +48,12 @@ export function HomePage() {
               <p className="text-brand-orange font-semibold text-sm uppercase tracking-widest mb-3">
                 Your time is our priority!
               </p>
-              <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-gray-900 leading-tight mb-6">
+              <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-white leading-tight mb-6">
                 Order Canteen Food
                 <br />
                 <span className="text-brand-orange">in Seconds!</span>
               </h1>
-              <p className="text-gray-500 text-lg mb-8 leading-relaxed">
+              <p className="text-gray-200 text-lg mb-8 leading-relaxed">
                 Skip the long queues at the canteen. Order your favourite food
                 online and pick it up at your scheduled time slot.
               </p>
@@ -58,14 +69,14 @@ export function HomePage() {
                 <Link to="/register">
                   <Button
                     variant="outline"
-                    className="rounded-full border-gray-300 text-gray-700 hover:bg-gray-50 px-8 py-3 text-base"
+                    className="rounded-full border-white text-white hover:bg-white hover:text-gray-900 px-8 py-3 text-base"
                     data-ocid="hero.secondary_button"
                   >
                     Get Started
                   </Button>
                 </Link>
               </div>
-              <div className="flex items-center gap-6 mt-8 text-sm text-gray-500">
+              <div className="flex items-center gap-6 mt-8 text-sm text-gray-200">
                 <div className="flex items-center gap-2">
                   <Clock className="w-4 h-4 text-brand-orange" /> Quick Pickup
                 </div>
@@ -82,17 +93,13 @@ export function HomePage() {
               initial={{ opacity: 0, x: 40 }}
               animate={{ opacity: 1, x: 0 }}
               transition={{ duration: 0.6, delay: 0.2 }}
-              className="relative hidden lg:block"
+              className="relative hidden lg:flex items-center justify-center"
             >
-              <div className="absolute -top-6 -right-6 w-48 h-48 bg-brand-orange/20 rounded-3xl rotate-12 z-0" />
-              <div className="absolute -bottom-6 right-12 w-32 h-32 bg-brand-orange/30 rounded-2xl -rotate-6 z-0" />
-              <div className="relative z-10 rounded-3xl overflow-hidden shadow-2xl">
-                <img
-                  src="https://picsum.photos/seed/canteenhero/600/450"
-                  alt="Canteen food"
-                  className="w-full h-full object-cover"
-                />
-              </div>
+              <img
+                src="/assets/whatsapp_image_2026-03-31_at_12.05.20_am-019d4527-d694-741c-b778-9ecb6e5cf878.jpeg"
+                alt="CampusBite"
+                className="w-80 h-auto object-contain drop-shadow-2xl"
+              />
             </motion.div>
           </div>
         </div>

@@ -239,7 +239,7 @@ export function CartPage() {
                   >
                     <Minus className="w-4 h-4" />
                   </button>
-                  <span className="w-8 text-center font-semibold">
+                  <span className="w-10 text-center font-bold text-lg bg-gray-50 rounded-lg py-0.5">
                     {c.quantity}
                   </span>
                   <button

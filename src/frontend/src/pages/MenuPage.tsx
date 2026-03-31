@@ -5,11 +5,12 @@ import { useState } from "react";
 import { toast } from "sonner";
 import { FoodCard } from "../components/FoodCard";
 import { useApp } from "../context/AppContext";
+import type { MenuItem } from "../context/AppContext";
 
 type Category = "all" | "snacks" | "drinks" | "meals";
 
 export function MenuPage() {
-  const { menuItems, addToCart } = useApp();
+  const { menuItems, addToCart, updateCartQty, cart } = useApp();
   const [category, setCategory] = useState<Category>("all");
   const [search, setSearch] = useState("");
 
@@ -19,15 +20,24 @@ export function MenuPage() {
     return matchCat && matchSearch;
   });
 
-  const handleAddToCart = (item: Parameters<typeof addToCart>[0]) => {
-    addToCart(item);
-    toast.success(`${item.name} added to cart!`);
+  const handleAddToCart = (item: MenuItem, quantity: number) => {
+    const existing = cart.find((c) => c.menuItem.id === item.id);
+    if (existing) {
+      updateCartQty(item.id, existing.quantity + quantity);
+    } else {
+      // Add once then update qty
+      addToCart(item);
+      if (quantity > 1) {
+        updateCartQty(item.id, quantity);
+      }
+    }
+    toast.success(`${item.name} x${quantity} cart me add ho gaya!`);
   };
 
   const cats: { key: Category; label: string; emoji: string }[] = [
     { key: "all", label: "All Items", emoji: "🍽️" },
     { key: "snacks", label: "Snacks", emoji: "🥙" },
-    { key: "drinks", label: "Drinks", emoji: "🧃" },
+    { key: "drinks", label: "Drinks", emoji: "🧣" },
     { key: "meals", label: "Meals", emoji: "🍱" },
   ];
 

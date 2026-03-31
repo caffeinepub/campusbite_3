@@ -29,6 +29,7 @@ const STATUS_LABELS: Record<OrderStatus, string> = {
   preparing: "Preparing",
   ready: "Ready for Pickup",
   completed: "Completed",
+  cancelled: "Cancelled",
 };
 
 const STATUS_COLORS: Record<OrderStatus, string> = {
@@ -36,6 +37,7 @@ const STATUS_COLORS: Record<OrderStatus, string> = {
   preparing: "bg-yellow-100 text-yellow-700",
   ready: "bg-green-100 text-green-700",
   completed: "bg-gray-100 text-gray-700",
+  cancelled: "bg-red-100 text-red-700",
 };
 
 export function VendorDashboard() {

@@ -8,6 +8,7 @@ import {
   Clock,
   Package,
   ShoppingBag,
+  XCircle,
 } from "lucide-react";
 import { useApp } from "../context/AppContext";
 import type { OrderStatus } from "../context/AppContext";
@@ -43,10 +44,15 @@ const STATUS_CONFIG: Record<
     color: "bg-gray-100 text-gray-700",
     icon: <CheckCircle2 className="w-4 h-4" />,
   },
+  cancelled: {
+    label: "Cancelled",
+    color: "bg-red-100 text-red-700",
+    icon: <XCircle className="w-4 h-4" />,
+  },
 };
 
 export function OrdersPage() {
-  const { orders, currentUser } = useApp();
+  const { orders, currentUser, cancelOrder } = useApp();
   const userOrders = currentUser
     ? orders.filter((o) => o.userId === currentUser.id)
     : [];
@@ -100,6 +106,8 @@ export function OrdersPage() {
         <div className="space-y-6">
           {userOrders.map((order, i) => {
             const cfg = STATUS_CONFIG[order.status];
+            const isCancelled = order.status === "cancelled";
+            const isTerminal = order.status === "completed" || isCancelled;
             const stepIdx = STATUS_STEPS.indexOf(order.status);
             return (
               <div
@@ -123,32 +131,34 @@ export function OrdersPage() {
                   </Badge>
                 </div>
 
-                {/* Progress Bar */}
-                <div className="flex items-center gap-1 mb-5">
-                  {STATUS_STEPS.map((s, idx) => (
-                    <div
-                      key={s}
-                      className="flex items-center flex-1 last:flex-none"
-                    >
+                {/* Progress Bar - only for non-cancelled orders */}
+                {!isCancelled && (
+                  <div className="flex items-center gap-1 mb-5">
+                    {STATUS_STEPS.map((s, idx) => (
                       <div
-                        className={`w-6 h-6 rounded-full flex items-center justify-center text-xs font-bold ${
-                          idx <= stepIdx
-                            ? "bg-brand-orange text-white"
-                            : "bg-gray-100 text-gray-400"
-                        }`}
+                        key={s}
+                        className="flex items-center flex-1 last:flex-none"
                       >
-                        {idx < stepIdx ? "✓" : idx + 1}
-                      </div>
-                      {idx < STATUS_STEPS.length - 1 && (
                         <div
-                          className={`h-1 flex-1 mx-1 rounded ${
-                            idx < stepIdx ? "bg-brand-orange" : "bg-gray-100"
+                          className={`w-6 h-6 rounded-full flex items-center justify-center text-xs font-bold ${
+                            idx <= stepIdx
+                              ? "bg-brand-orange text-white"
+                              : "bg-gray-100 text-gray-400"
                           }`}
-                        />
-                      )}
-                    </div>
-                  ))}
-                </div>
+                        >
+                          {idx < stepIdx ? "✓" : idx + 1}
+                        </div>
+                        {idx < STATUS_STEPS.length - 1 && (
+                          <div
+                            className={`h-1 flex-1 mx-1 rounded ${
+                              idx < stepIdx ? "bg-brand-orange" : "bg-gray-100"
+                            }`}
+                          />
+                        )}
+                      </div>
+                    ))}
+                  </div>
+                )}
 
                 {/* Items */}
                 <div className="space-y-2 mb-4">
@@ -173,6 +183,21 @@ export function OrdersPage() {
                     Total: ₹{order.total}
                   </div>
                 </div>
+
+                {/* Cancel Order Button */}
+                {!isTerminal && (
+                  <div className="mt-4 pt-4 border-t">
+                    <Button
+                      variant="outline"
+                      className="w-full border-red-300 text-red-600 hover:bg-red-50 hover:text-red-700 flex items-center gap-2"
+                      onClick={() => cancelOrder(order.id)}
+                      data-ocid={`orders.delete_button.${i + 1}`}
+                    >
+                      <XCircle className="w-4 h-4" />
+                      Cancel Order
+                    </Button>
+                  </div>
+                )}
               </div>
             );
           })}

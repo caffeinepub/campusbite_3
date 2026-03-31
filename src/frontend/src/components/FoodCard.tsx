@@ -1,11 +1,12 @@
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { MapPin, ShoppingCart } from "lucide-react";
+import { MapPin, Minus, Plus, ShoppingCart } from "lucide-react";
+import { useState } from "react";
 import type { MenuItem } from "../context/AppContext";
 
 interface FoodCardProps {
   item: MenuItem;
-  onAddToCart?: (item: MenuItem) => void;
+  onAddToCart?: (item: MenuItem, quantity: number) => void;
   index?: number;
 }
 
@@ -16,6 +17,15 @@ const categoryColors: Record<string, string> = {
 };
 
 export function FoodCard({ item, onAddToCart, index = 1 }: FoodCardProps) {
+  const [qty, setQty] = useState(1);
+
+  const handleAdd = () => {
+    if (onAddToCart) {
+      onAddToCart(item, qty);
+      setQty(1);
+    }
+  };
+
   return (
     <div
       className="bg-white rounded-2xl shadow-card overflow-hidden hover:shadow-lg transition-shadow duration-300"
@@ -47,14 +57,42 @@ export function FoodCard({ item, onAddToCart, index = 1 }: FoodCardProps) {
           {item.description}
         </p>
         {onAddToCart && (
-          <Button
-            onClick={() => onAddToCart(item)}
-            className="w-full rounded-full bg-brand-orange hover:bg-orange-600 text-white text-sm"
-            data-ocid={`menu.button.${index}`}
-          >
-            <ShoppingCart className="w-4 h-4 mr-2" />
-            Add to Cart
-          </Button>
+          <div className="space-y-3">
+            <div className="flex items-center justify-between bg-gray-50 rounded-xl px-3 py-2">
+              <span className="text-sm text-gray-600 font-medium">
+                Kitane chahiye?
+              </span>
+              <div className="flex items-center gap-2">
+                <button
+                  type="button"
+                  onClick={() => setQty((q) => Math.max(1, q - 1))}
+                  className="w-7 h-7 rounded-full bg-white border border-gray-200 hover:bg-gray-100 flex items-center justify-center shadow-sm"
+                  data-ocid={`menu.qty_minus.${index}`}
+                >
+                  <Minus className="w-3 h-3" />
+                </button>
+                <span className="w-8 text-center font-bold text-gray-900 text-base">
+                  {qty}
+                </span>
+                <button
+                  type="button"
+                  onClick={() => setQty((q) => q + 1)}
+                  className="w-7 h-7 rounded-full bg-brand-orange hover:bg-orange-600 flex items-center justify-center shadow-sm"
+                  data-ocid={`menu.qty_plus.${index}`}
+                >
+                  <Plus className="w-3 h-3 text-white" />
+                </button>
+              </div>
+            </div>
+            <Button
+              onClick={handleAdd}
+              className="w-full rounded-full bg-brand-orange hover:bg-orange-600 text-white text-sm"
+              data-ocid={`menu.button.${index}`}
+            >
+              <ShoppingCart className="w-4 h-4 mr-2" />
+              Add {qty > 1 ? `${qty} items` : "to Cart"} • ₹{item.price * qty}
+            </Button>
+          </div>
         )}
       </div>
     </div>

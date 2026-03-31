@@ -1,14 +1,7 @@
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Link, useNavigate } from "@tanstack/react-router";
-import {
-  LogOut,
-  Menu,
-  ShoppingCart,
-  User,
-  UtensilsCrossed,
-  X,
-} from "lucide-react";
+import { LogOut, Menu, ShoppingCart, User, X } from "lucide-react";
 import { useState } from "react";
 import { useApp } from "../context/AppContext";
 
@@ -28,13 +21,11 @@ export function Navbar() {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-16">
           <Link to="/" className="flex items-center gap-2">
-            <div className="w-9 h-9 rounded-full bg-brand-orange flex items-center justify-center">
-              <UtensilsCrossed className="w-5 h-5 text-white" />
-            </div>
-            <span className="text-xl font-bold">
-              <span className="text-white">Campus</span>
-              <span className="text-brand-orange">Bite</span>
-            </span>
+            <img
+              src="/assets/whatsapp_image_2026-03-31_at_12.05.20_am-019d4527-d694-741c-b778-9ecb6e5cf878.jpeg"
+              alt="CampusBite Logo"
+              className="h-10 w-auto object-contain"
+            />
           </Link>
 
           <nav className="hidden md:flex items-center gap-6">

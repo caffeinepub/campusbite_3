@@ -27,7 +27,12 @@ export interface CartItem {
   quantity: number;
 }
 
-export type OrderStatus = "received" | "preparing" | "ready" | "completed";
+export type OrderStatus =
+  | "received"
+  | "preparing"
+  | "ready"
+  | "completed"
+  | "cancelled";
 
 export interface Order {
   id: string;
@@ -99,6 +104,30 @@ const INITIAL_MENU: MenuItem[] = [
     description: "Grilled cottage cheese with bell peppers and mint chutney",
   },
   {
+    id: "21",
+    name: "Poha",
+    price: 20,
+    category: "snacks",
+    image: "/assets/generated/poha.dim_400x300.jpg",
+    description: "Fluffy flattened rice with onions, peanuts and curry leaves",
+  },
+  {
+    id: "22",
+    name: "Upma",
+    price: 25,
+    category: "snacks",
+    image: "/assets/generated/upma.dim_400x300.jpg",
+    description: "Savory semolina porridge with vegetables and mustard seeds",
+  },
+  {
+    id: "23",
+    name: "Maggi",
+    price: 30,
+    category: "snacks",
+    image: "/assets/generated/maggi.dim_400x300.jpg",
+    description: "Classic instant noodles with masala, a canteen favorite",
+  },
+  {
     id: "5",
     name: "Masala Chai",
     price: 10,
@@ -145,6 +174,14 @@ const INITIAL_MENU: MenuItem[] = [
     category: "drinks",
     image: "/assets/generated/chaas.dim_400x300.jpg",
     description: "Refreshing spiced Indian buttermilk",
+  },
+  {
+    id: "24",
+    name: "Nimbu Paani",
+    price: 20,
+    category: "drinks",
+    image: "/assets/generated/nimbu-paani.dim_400x300.jpg",
+    description: "Fresh lemon water with salt, sugar and mint",
   },
   {
     id: "9",
@@ -202,6 +239,22 @@ const INITIAL_MENU: MenuItem[] = [
     image: "/assets/generated/paneer-butter-masala.dim_400x300.jpg",
     description: "Rich creamy tomato gravy with paneer, served with roti",
   },
+  {
+    id: "25",
+    name: "Paratha",
+    price: 40,
+    category: "meals",
+    image: "/assets/generated/paratha.dim_400x300.jpg",
+    description: "Whole wheat flatbread stuffed with spiced potato filling",
+  },
+  {
+    id: "26",
+    name: "Chana Masala",
+    price: 65,
+    category: "meals",
+    image: "/assets/generated/chana-masala.dim_400x300.jpg",
+    description: "Spicy chickpea curry served with rice or roti",
+  },
 ];
 
 const INITIAL_USERS: User[] = [
@@ -249,6 +302,7 @@ interface AppContextType {
   clearCart: () => void;
   placeOrder: (order: Omit<Order, "id" | "userId" | "createdAt">) => Order;
   updateOrderStatus: (orderId: string, status: OrderStatus) => void;
+  cancelOrder: (orderId: string) => void;
   addMenuItem: (item: Omit<MenuItem, "id">) => void;
   removeMenuItem: (itemId: string) => void;
   updateMenuItem: (item: MenuItem) => void;
@@ -361,6 +415,12 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
     );
   };
 
+  const cancelOrder = (orderId: string) => {
+    setOrders((prev) =>
+      prev.map((o) => (o.id === orderId ? { ...o, status: "cancelled" } : o)),
+    );
+  };
+
   const addMenuItem = (item: Omit<MenuItem, "id">) => {
     setMenuItems((prev) => [...prev, { ...item, id: `menu_${Date.now()}` }]);
   };
@@ -388,6 +448,7 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
         clearCart,
         placeOrder,
         updateOrderStatus,
+        cancelOrder,
         addMenuItem,
         removeMenuItem,
         updateMenuItem,
